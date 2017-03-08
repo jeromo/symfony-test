@@ -28,8 +28,13 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            $factory = $this->get('security.encoder_factory');
+
+            $encoder = $factory->getEncoder($user);
+            $password = $encoder->encodePassword($user->getPassword(), $user->getSalt());
+            $user->setPassword($password);
 //            $registration = $form->getData();
-            $user->setEmail($user->getUsername() + "@a.com");
+            $user->setEmail($user->getUsername() . "@a.com");
             $userManager->updateUser($user);
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute("questions");
@@ -52,12 +57,12 @@ class DefaultController extends Controller
         return "";
     }
     /**
-     * @Route("/quetions", name="question")
+     * @Route("/questions", name="questions")
      */
     public function questionsAction(Request $request)
     {
 
-        return $this->render('/home.html.twig', array ('home_text' => "Ahora, las preguntas"));
+        return $this->render('/questions.html.twig', array ('home_text' => "Ahora, las preguntas"));
         // replace this example code with whatever you need
 //        return $this->render('default/index.html.twig', [
 //            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
