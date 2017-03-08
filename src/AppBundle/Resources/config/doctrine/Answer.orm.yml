@@ -1,0 +1,19 @@
+# src/AppBundle/Resources/config/doctrine/Answer.orm.yml
+AppBundle\Entity\Answer:
+    type: entity
+    table: answer
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        description:
+            type: string
+            length: 100
+    manyToOne:
+        question:
+            targetEntity: Question
+            inversedBy: answers
+            joinColumn:
+                name: question_id
+                referencedColumnName: id
